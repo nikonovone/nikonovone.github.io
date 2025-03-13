@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Normalizing Flows</title>
+  <meta name="author" content="Nikonov Nikita">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="Normalizing Flows written October 20, 2019">
+
+  <link rel="canonical" href="/normalizing-flows.html">
+
+  <link href="/favicon.png" rel="icon">
+
+
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Normalizing Flows</h1>
+        <div class="meta">
+          written <time datetime="2019-10-20T09:20:00+07:00">October 20, 2019</time>
+        </div>
+        <h1>Main idea</h1>
+<hr>
+<p>Suppose we have a transformation $z = f(x)$ that translates a random variable $x$ into $z$. In such a transformation, the probability density must be transformed so that the total probability (probability mass) is preserved.</p>
+<h3>Univariate case</h3>
+<p>In the univariate case it looks like:$$p(x)dx = p(z)dz$$From where: $$p(x) = p(z)\left|\frac{dz}{dx}\right|$$
+In the multi-moer case we get the Jacobian matrix:
+$$p(x) = p(z)| det(Jf)|$$</p>
+<h1>Normalizing flows prerequisites</h1>
+<hr>
+<h2>Jacobian Matrix</h2>
+<p>Let $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ be a differentiable function.
+$\mathbf{z} = f(\mathbf{x})$, the Jacobian matrix $\mathbf{J} = \frac{\partial\mathbf{z}}{\partial\mathbf{x}}$ is:</p>
+<p>$$
+\mathbf{J} = \begin{bmatrix}
+\frac{\partial z_1}{\partial x_1} &amp; \cdots &amp; \frac{\partial z_1}{\partial x_m} \
+\vdots &amp; \ddots &amp; \vdots \
+\frac{\partial z_m}{\partial x_1} &amp; \cdots &amp; \frac{\partial z_m}{\partial x_m}
+\end{bmatrix} \in \mathbb{R}^{m \times m}
+$$</p>
+<h2>Change of Variable Theorem (CoV)</h2>
+<p>Let $\mathbf{x}$ be a random variable with density function $p(\mathbf{x})$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, invertible function.</p>
+<p>If:
+- $\mathbf{z} = f(\mathbf{x})$
+- $\mathbf{x} = f^{-1}(\mathbf{z}) = g(\mathbf{z})$</p>
+<p>Then:
+Forward transformation:</p>
+<p>$$p(\mathbf{x}) = p(\mathbf{z})\left|\det\left(\mathbf{J}_f\right)\right| = p(\mathbf{z})\left|\det\left(\frac{\partial\mathbf{z}}{\partial\mathbf{x}}\right)\right| = p(f(\mathbf{x}))\left|\det\left(\frac{\partial f(\mathbf{x})}{\partial\mathbf{x}}\right)\right|$$</p>
+<p>Inverse transformation:
+$$p(\mathbf{z}) = p(\mathbf{x})\left|\det\left(\mathbf{J}_g\right)\right| = p(\mathbf{x})\left|\det\left(\frac{\partial\mathbf{x}}{\partial\mathbf{z}}\right)\right| = p(g(\mathbf{z}))\left|\det\left(\frac{\partial g(\mathbf{z})}{\partial\mathbf{z}}\right)\right|$$</p>
+<h2>Inverse function theorem</h2>
+<p>If function $f$:
+- invertible
+- Jacobian matrix is continuous
+- Jacobian matrix is non-sinular
+Then:
+$$\mathbf{J}_{f^{-1}} = \mathbf{J}_g = \mathbf{J}_f^{-1}$$</p>
+<p>And: $$|\det(\mathbf{J}_{f^{-1}})| = |\det(\mathbf{J}_g)| = \frac{1}{|\det(\mathbf{J}_f)|}$$</p>
+<h1>Maximum Likelihood Estimation (MLE) for Normalizing Flows</h1>
+<hr>
+<h2>Density Function</h2>
+<p>According to the change of variables theorem:</p>
+<p>$$p(x|\theta) = p(z)\left|\det\left(\frac{\partial z}{\partial x}\right)\right| = p(f_\theta(x))\left|\det\left(\frac{\partial f_\theta(x)}{\partial x}\right)\right|$$</p>
+<h2>Log-likelihood</h2>
+<p>The maximum likelihood optimization problem:</p>
+<p>$$\log p(x|\theta) = \log p(f_\theta(x)) + \log |\det(J_f)| \rightarrow \max_\theta$$</p>
+<h2>Components</h2>
+<ul>
+<li>$p(x|\theta)$ - density in data space</li>
+<li>$p(z)$ - density in latent space (typically a simple distribution)</li>
+<li>$f_\theta(x)$ - parametric transformation</li>
+<li>$\det(J_f)$ - determinant of the Jacobian matrix</li>
+<li>$\theta$ - model parameters</li>
+</ul>
+<h2>Key Points</h2>
+<ol>
+<li>The first term $\log p(f_\theta(x))$ ensures matching to the latent distribution</li>
+<li>The second term $\log |\det(J_f)|$ accounts for volume change under transformation</li>
+<li>Optimization is performed over transformation parameters $\theta$</li>
+</ol>
+<h2>Notes</h2>
+<ul>
+<li>The log-likelihood has two interpretable terms</li>
+<li>The Jacobian determinant keeps track of how volumes change</li>
+<li>Simple latent distribution $p(z)$ makes sampling easy</li>
+<li>The transformation must be invertible and differentiable</li>
+</ul>
+<h1>Composition Theorem for Normalizing Flows</h1>
+<hr>
+<h2>Statement</h2>
+<p>If ${f_k}_{k=1}^K$ satisfy conditions of the change of variable theorem, then their composition
+$$z = f(x) = f_K \circ \cdots \circ f_1(x)$$
+also satisfies it.</p>
+<h2>Chain Rule for Densities</h2>
+<p>The transformation of probability density follows:</p>
+<p>$$p(x) = p(f(x))\left|\det\left(\frac{\partial f(x)}{\partial x}\right)\right| = p(f(x))\left|\det\left(\frac{\partial f_K}{\partial f_{K-1}}\cdots\frac{\partial f_1}{\partial x}\right)\right|$$</p>
+<h2>Decomposition of Jacobian Determinant</h2>
+<p>The determinant can be factorized:</p>
+<p>$$p(x) = p(f(x))\prod_{k=1}^K\left|\det\left(\frac{\partial f_k}{\partial f_{k-1}}\right)\right| = p(f(x))\prod_{k=1}^K|\det(J_{f_k})|$$</p>
+<h2>Key Insights</h2>
+<ol>
+<li>The composite transformation preserves invertibility and differentiability</li>
+<li>The Jacobian determinant of composition factorizes into product of individual determinants</li>
+<li>This allows building complex transformations from simple components</li>
+<li>Log-likelihood computation becomes sum of individual log-determinants:
+  $$\log|\det(J_f)| = \sum_{k=1}^K\log|\det(J_{f_k})|$$[[Generative AI]]
+[[Gaussian autoregressive normalizing flows]]
+[[RealNVP - Coupling Layer Architecture]]</li>
+</ol>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+    <footer id="footer" class="her-row">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+
+
+
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Python Interview</title>
+  <meta name="author" content="Nikonov Nikita">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="Python Interview written October 20, 2019">
+
+  <link rel="canonical" href="/python-interview.html">
+
+  <link href="/favicon.png" rel="icon">
+
+
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Python Interview</h1>
+        <div class="meta">
+          written <time datetime="2019-10-20T09:20:00+07:00">October 20, 2019</time>
+        </div>
+        <ol>
+<li>Какие основные типы данных существуют в Python? Приведите примеры их использования.</li>
+<li>В чём разница между списком (list) и кортежем (tuple)? Когда что лучше использовать?</li>
+<li>Как работает оператор is в Python и чем он отличается от ==?</li>
+<li>Что такое переменная в Python?</li>
+<li>Что такое list comprehension и какие преимущества даёт его использование?</li>
+<li>Почему следующий код может давать разные результаты:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">a</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>
+<span class="c1"># True</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">257</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mi">257</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span> <span class="ow">is</span> <span class="n">d</span><span class="p">)</span>
+<span class="c1"># False</span>
+</code></pre></div>
+
+<ol>
+<li>Как работает GIL (Global Interpreter Lock) в Python и какие ограничения он накладывает?</li>
+<li>Объясните разницу между <em>args и </em>*kwargs. Приведите пример использования.</li>
+<li>Что такое декораторы в Python? Напишите простой декоратор, который измеряет время выполнения функции.</li>
+<li>Объясните принцип работы генераторов. В чём их преимущество перед обычными функциями?</li>
+<li>Как работает сборщик мусора в Python?</li>
+<li>Что такое магические методы (dunder methods)? Приведите примеры их использования.</li>
+<li>Что такое контекстный менеджер? Напишите свой простой контекстный менеджер.</li>
+<li>В чём разница между процессами и потоками в Python? Когда что лучше использовать?</li>
+<li>Есть ли тут ошибка и в чем она?</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">[]):</span>    <span class="c1"># Плохо! items создается один раз</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+</code></pre></div>
+
+<p>Списки:
+1. Что такое список, как работает память в списках Python?
+2. Какая временная сложность основных операций со списками (доступ по индексу, вставка, удаление)?
+3. Почему добавление элементов в начало списка неэффективно? Как это можно оптимизировать?
+4. Какие методы изменяют список на месте, а какие возвращают новый список? Почему это важно знать?
+5. В чём разница между методами append() и extend()?
+6. Как работает сортировка списков в Python? Что такое key функция в sort() и sorted()?
+7. Какие способы копирования списков вы знаете? В чём их различия?
+8. Объясните работу отрицательных индексов в списках.
+9. Как работают срезы? Что означает третий параметр в срезе [start:stop:step]?
+10. Почему срез <code>[::-1]</code> переворачивает список? Какие еще трюки со срезами вы знаете?
+11. Как эффективно получить каждый второй элемент списка?</p>
+<p>Коллекции и их особенности:
+1. В чём разница между set и frozenset? Когда использовать каждый из них?
+2. Какие операции можно выполнять над множествами (set)? Приведите примеры.
+3. Что такое chainmap и когда его использование может быть полезным?
+4. Объясните разницу между списком и deque. В каких случаях deque предпочтительнее?</p>
+<p>Про словари:
+1. Что такое словарь?
+2. Какая временная сложность основных операций со словарём (вставка, удаление, поиск)?
+3. Почему словарь может использовать только неизменяемые типы в качестве ключей?
+4. Что такое хеширование и почему оно важно для словарей?
+5. Что такое коллизии и как они решаются в словарях?
+6. Как проверить, является ли объект хешируемым?</p>
+<p>Итераторы и генераторы:
+1. В чём разница между итерируемым объектом (iterable) и итератором (iterator)?
+2. Какие магические методы необходимо реализовать, чтобы создать свой итератор?
+3. Чем отличается генератор от обычной функции? В чём его преимущества?
+4. Что делает оператор yield? Как он работает?
+5. Напишите свой класс-итератор, который будет возвращать числа Фибоначчи:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FibonacciIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_number</span><span class="p">):</span>
+    <span class="c1"># Ваша реализация</span>
+    <span class="k">pass</span>
+</code></pre></div>
+
+<ol>
+<li>Как превратить генератор в список? Почему не всегда стоит это делать?</li>
+<li>Что такое send() в генераторах и как его использовать? Приведите пример.</li>
+</ol>
+<p>Практические задачи:
+1. Напишите функцию, которая находит все дубликаты в списке. Какая сложность вашего решения?
+2. Как бы вы реализовали синглтон в Python?
+3. Напишите генератор, который будет возвращать простые числа. Как оптимизировать его работу?</p>
+<p>Дополнительные вопросы:
+1. Что такое async/await в Python? Для каких задач это используется?
+2. Как работает with в Python? Что происходит при входе и выходе из контекстного менеджера?</p>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+    <footer id="footer" class="her-row">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+
+
+
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
